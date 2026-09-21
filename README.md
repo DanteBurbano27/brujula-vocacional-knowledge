@@ -43,6 +43,10 @@ All materials within this repository adhere to verified attribution, licensing, 
 
 ### Governance & Integrity Verification
 - **Attribution & Licensing**: Open non-commercial educational use. Explicit source citations are embedded in every editorial section (`fuentes-licencias.html`).
+- **O*NET Licensing & Artifact Transformations**:
+  - *Trademark & Authoring*: O*NET™ is a trademark of the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Authoring by National Center for O*NET Development (Rounds, Hoff, Lewis, 2021).
+  - *Compendium 1 (`documents/01_Compendio_...pdf`)*: Integrates the Spanish translation and educational reproduction of the official O*NET Interest Profiler Manual under [O*NET Career Exploration Tools License](https://www.onetcenter.org/license_tools.html).
+  - *Web Editorial Layer (`exploracion-intereses-ria-sec.html`)*: Constitutes an independent educational adaptation mapping RIASEC dimensions to Colombian technical pathways (SENA). This adaptation has not been endorsed, reviewed, or approved by USDOL/ETA or the National Center for O*NET Development.
 - **Temporal Separation**: Historical data (e.g. OIT youth labor indicators 2016–2023) is explicitly segregated from current labor inquiries to prevent presenting historical trends as real-time economic data.
 - **Cryptographic Asset Manifest**: Governed knowledge and evaluation assets are tracked with SHA256 checksums in [`MANIFEST-SHA256.txt`](MANIFEST-SHA256.txt).
 

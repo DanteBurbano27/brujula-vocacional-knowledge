@@ -19,10 +19,10 @@ Each test item in `questions.json` adheres to the formal schema defined in [`eva
   "id": "BRU-RIA-001",
   "question": "¿Qué ocupaciones del catálogo del SENA se alinean con un perfil predominantemente Realista e Investigador?",
   "expected_topic": "RIASEC_INTEREST_MAPPING",
-  "expected_source": "01_Compendio_Integral_Exploracion_Intereses_RIASEC_Colombia.pdf",
-  "expected_section": "Compendio 1: #realista-r y #investigativa-i (#combinaciones-de-intereses)",
+  "expected_source": "exploracion-intereses-ria-sec.html",
+  "expected_section": "realista-r",
   "should_answer": true,
-  "rationale": "El Compendio 1 detalla la correspondencia entre rasgos Realistas/Investigadores y programas de automatización, mecánica industrial y telecomunicaciones del SENA."
+  "rationale": "El compendio detalla la correspondencia entre rasgos Realistas/Investigadores y programas de automatización, mecánica industrial y telecomunicaciones del SENA."
 }
 ```
 
