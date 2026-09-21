@@ -2,7 +2,8 @@
 
 [![Knowledge Architecture](https://img.shields.io/badge/Architecture-Knowledge_Engineering-blue)](#knowledge-architecture)
 [![Data Governance](https://img.shields.io/badge/Governance-O*NET%20%7C%20SENA%20%7C%20OIT-green)](#sources--knowledge-governance)
-[![RAG Benchmark](https://img.shields.io/badge/Evaluation-RAG_Eval_Pack-orange)](#rag-evaluation-pack)
+[![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=github-actions)](https://github.com/DanteBurbano27/brujula-vocacional-knowledge/actions)
+[![Evaluation Specification](https://img.shields.io/badge/Evaluation-Specification_Pack-orange)](#rag-evaluation-dataset-specification)
 [![GitHub Pages](https://img.shields.io/badge/Hosting-GitHub_Pages-222222?logo=github)](https://danteburbano27.github.io/brujula-vocacional-knowledge/)
 
 A curated, governed, and structured knowledge repository designed to support grounded Retrieval-Augmented Generation (RAG) and conversational agents (such as Microsoft 365 Copilot Studio) in Colombian youth vocational guidance.
@@ -13,7 +14,7 @@ A curated, governed, and structured knowledge repository designed to support gro
 
 Vocational and career orientation for Colombian youth faces systemic friction:
 - **LLM Hallucination & Foreign Bias**: General-purpose LLMs frequently recommend foreign degrees, non-existent occupational tracks, or jurisdictional realities inapplicable to Colombia.
-- **Fragmented Occupational Data**: Authoritative standards (SENA CNO, O*NET, DANE, OIT) reside across isolated databases and complex administrative catalogs that are inaccessible to conversational systems.
+- **Fragmented Occupational Data**: Authoritative materials reside across distinct pedagogical guides and employment frameworks that are inaccessible to conversational systems.
 - **Safety & Boundary Failures**: Generic AI chat systems risk offering speculative psychological diagnoses or unwarranted career guarantees without appropriate pedagogical boundaries.
 
 **Brújula Vocacional Colombia** resolves this by providing a domain-constrained, verified knowledge architecture specifically organized for semantic search and bounded RAG retrieval.
@@ -23,27 +24,37 @@ Vocational and career orientation for Colombian youth faces systemic friction:
 ## 2. Why a Governed Knowledge Base?
 
 Rather than fine-tuning a black-box model, grounding conversational systems through a governed knowledge repository provides:
-1. **Verifiable Traceability**: Every generated recommendation links to an authoritative compendium, standard occupational code (CNO/O*NET), or validated national framework.
+1. **Verifiable Traceability**: Every generated recommendation links to an authoritative compendium or validated vocational framework.
 2. **Deterministic Guardrails**: The knowledge explicitly declares what the assistant can answer and defines strict refusal protocols for clinical psychological counseling or guaranteed employment promises.
-3. **Continuous Auditability**: Outdated program accreditations or economic figures can be updated without retraining weights.
+3. **Continuous Auditability**: Informational assets can be updated without retraining weights.
 
 ---
 
 ## 3. Sources & Knowledge Governance
 
-All materials within this repository adhere to rigorous attribution, licensing, and governance criteria:
+All materials within this repository adhere to verified attribution, licensing, and governance criteria as documented in [`fuentes-licencias.html`](fuentes-licencias.html):
 
-| Source Authority | Applied Framework | Role in Knowledge Base |
-|---|---|---|
-| **O\*NET 28.0 (U.S. Dept. of Labor)** | RIASEC Occupational Interest Profiler | Standard taxonomy for Realistic, Investigative, Artistic, Social, Enterprising, and Conventional traits. |
-| **SENA (Servicio Nacional de Aprendizaje)** | CNO (Clasificación Nacional de Ocupaciones) | Colombian technical, technological, and occupational competence catalog. |
-| **OIT (Organización Internacional del Trabajo)** | CIUO-88 / CIUO-08 | International standard classification of occupations for comparative occupational analysis. |
-| **DANE & ICFES** | Colombian Youth & Education Indicators | Socio-demographic context, regional educational disparities, and transition pathways from secondary school. |
+| Source Material | Authoring Body | License & Conditions | Applied Role in Knowledge Base |
+|---|---|---|---|
+| **O\*NET Interest Profiler Manual (2021)** | National Center for O\*NET Development (Rounds, Hoff, Lewis) | Official conditions of [O\*NET Career Exploration Tools](https://www.onetcenter.org/license_tools.html) | Foundational psychometric taxonomy for RIASEC interest exploration (Compendio 1). |
+| **Identificación de intereses y objetivos ocupacionales** | Servicio Nacional de Aprendizaje — SENA (División de Empleo) | [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es) | Practical exercises, occupational profiling, and technical training pathways in Colombia (Compendio 1). |
+| **¿Cómo apoyar a un buscador de empleo? (2023)** | Organización Internacional del Trabajo (OIT) | [Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es) | Methodologies for active listening, interview techniques, and vocational accompaniment (Compendio 2). |
+| **Panorama del empleo juvenil en Colombia 2016-2023** | Organización Internacional del Trabajo (Oficina Países Andinos) | [Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es) | Historical context of youth labor dynamics, informal employment, and transition challenges (Compendio 2). |
 
-### Governance & Versioning Rules
+### Governance & Integrity Verification
 - **Attribution & Licensing**: Open non-commercial educational use. Explicit source citations are embedded in every editorial section (`fuentes-licencias.html`).
-- **Temporal Separation**: Historical framework definitions (e.g. earlier CIUO versions) are segregated from active Colombian occupational norms to prevent outdated retrieval matches.
-- **Change Management**: Compendiums are compiled with explicit edition dates and checksum validation (`MANIFEST.txt`).
+- **Temporal Separation**: Historical data (e.g. OIT youth labor indicators 2016–2023) is explicitly segregated from current labor inquiries to prevent presenting historical trends as real-time economic data.
+- **Cryptographic Asset Manifest**: All repository assets are tracked with SHA256 checksums in [`MANIFEST-SHA256.txt`](MANIFEST-SHA256.txt).
+
+#### Validating Cryptographic Hashes
+- **Linux / macOS**:
+  ```bash
+  sha256sum -c MANIFEST-SHA256.txt
+  ```
+- **Windows (PowerShell)**:
+  ```powershell
+  Get-FileHash -Path documents/*.pdf -Algorithm SHA256
+  ```
 
 ---
 
@@ -53,23 +64,24 @@ The repository organizes information across dual representation layers: a semant
 
 ```mermaid
 flowchart TD
-    subgraph RawSources["Authoritative Standards"]
-        ONET["O*NET 28.0 (RIASEC)"]
-        SENA["SENA CNO Catalogs"]
-        OIT["OIT Frameworks"]
-        DANE["DANE / ICFES Data"]
+    subgraph RawSources["Authoritative Standards (fuentes-licencias.html)"]
+        ONET["O*NET Interest Profiler Manual (2021)"]
+        SENA["SENA: Identificación de Intereses"]
+        OIT1["OIT: Apoyo a Buscadores de Empleo (2023)"]
+        OIT2["OIT: Panorama Empleo Juvenil 2016-2023"]
     end
 
     subgraph EditorialLayer["Editorial & Governance Layer"]
-        C1["Compendio 1: Intereses RIASEC y Ocupaciones en Colombia"]
-        C2["Compendio 2: Acompañamiento y Contexto Juvenil"]
-        Attribution["Licencias y Límites Éticos (fuentes-licencias.html)"]
+        C1["Compendio 1: Intereses RIASEC y Ocupaciones (190 págs)"]
+        C2["Compendio 2: Acompañamiento y Contexto Juvenil (172 págs)"]
+        Attribution["fuentes-licencias.html (Licencias y Descargos)"]
     end
 
-    subgraph RAGIngestion["Semantic Serving Layer"]
+    subgraph RAGIngestion["Serving & Verification Layer"]
         WebIndex["Semantic HTML Layer (robots.txt, sitemap.xml)"]
-        PDFDocs["documents/ (Full Text-Searchable Compendiums)"]
-        EvalPack["eval/questions.json (RAG Benchmark)"]
+        PDFDocs["documents/ (Text-Searchable PDF Compendiums)"]
+        EvalPack["eval/questions.json (Evaluation Dataset Specification)"]
+        Checksum["MANIFEST-SHA256.txt (Cryptographic Checksums)"]
     end
 
     subgraph RAGConsumer["Downstream AI Consumer"]
@@ -79,8 +91,8 @@ flowchart TD
 
     ONET --> C1
     SENA --> C1
-    OIT --> C1
-    DANE --> C2
+    OIT1 --> C2
+    OIT2 --> C2
     C1 --> PDFDocs
     C2 --> PDFDocs
     C1 --> WebIndex
@@ -89,74 +101,65 @@ flowchart TD
     PDFDocs --> Copilot
     WebIndex --> Copilot
     Guard --> Copilot
-    EvalPack -.->|Benchmark Verification| Copilot
+    EvalPack -.->|Benchmark Target| Copilot
 ```
 
 ### Document Assets
-1. **Compendio 1 (`documents/01_Compendio_...pdf`)**:
-   - Comprehensive alignment of Holland RIASEC dimensions with Colombian technical and vocational occupations (SENA CNO).
-   - Cross-walk tables linking student interests with concrete productive sectors in Colombia.
-2. **Compendio 2 (`documents/02_Compendio_...pdf`)**:
-   - 172-page comprehensive compendium on Colombian juvenile transition, psychosocial accompaniment methodologies, regional barriers, and educational routes.
+1. **Compendio 1 (`documents/01_Compendio_Integral_Exploracion_Intereses_RIASEC_Colombia.pdf`)** (190 pages):
+   - Editorial synthesis, full O*NET Interest Profiler manual, and SENA occupational exploration materials.
+2. **Compendio 2 (`documents/02_Compendio_Integral_Acompanamiento_Contexto_Juvenil_Colombia.pdf`)** (172 pages):
+   - Editorial accompaniment framework, OIT job-seeker support guide, and youth labor context.
 3. **Semantic HTML Pages**:
-   - `index.html`: Knowledge portal and structural navigation.
-   - `exploracion-intereses-ria-sec.html`: Web-optimized extraction of Compendium 1.
-   - `acompanamiento-contexto-colombia.html`: Web-optimized extraction of Compendium 2.
-   - `fuentes-licencias.html`: Formal attribution, terms of use, and ethical boundaries.
+   - `index.html`: Portal overview and architectural navigation.
+   - `exploracion-intereses-ria-sec.html`: Editorial layer for Compendium 1.
+   - `acompanamiento-contexto-colombia.html`: Editorial layer for Compendium 2.
+   - `fuentes-licencias.html`: Formal attributions, terms of use, and ethical boundaries.
 
 ---
 
 ## 5. Downstream Integration: Microsoft Copilot Studio & RAG
 
-To integrate this knowledge base into a bounded conversational assistant (e.g. Microsoft 365 Copilot Agent Builder or Azure AI Search):
+To integrate this knowledge base into a bounded conversational assistant (e.g. Microsoft 365 Copilot Agent Builder):
 
 ### Configuration Parameters
 - **Primary Source URL**: `https://danteburbano27.github.io/brujula-vocacional-knowledge/`
 - **Search Web**: **OFF** (`Search all websites: false`)
 - **Knowledge Mode**: **Only use specified sources: ON**
-- **Document Chunking Strategy**: 512–1024 token chunks with 10% overlap, respecting table boundaries in compendiums.
+- **Document Chunking Strategy**: 512–1024 token chunks with 10% overlap, respecting section anchors.
 
 ### System Prompt Guardrails (Recommended)
 ```text
 Eres el Asistente Brújula Vocacional Colombia.
 Responde únicamente con base en los compendios y documentos oficiales proporcionados.
 Reglas estrictas:
-1. No emitas diagnósticos psicológicos ni clínicos. Si el usuario manifiesta crisis emocionales, remítelo a las líneas de atención oficiales en Colombia (Línea 106 / Línea Diversa).
+1. No emitas diagnósticos psicológicos ni clínicos. Si el usuario manifiesta crisis emocionales, remítelo a las líneas de atención oficiales en Colombia (Línea 106).
 2. No garantices empleabilidad, ingresos fijos ni admisiones universitarias.
-3. Toda ocupación recomendada debe referenciar su marco CNO/SENA o dimensión RIASEC correspondiente.
+3. Toda ocupación recomendada debe referenciar su dimensión RIASEC correspondiente.
 ```
 
 ---
 
-## 6. RAG Evaluation Pack (`eval/`)
+## 6. RAG Evaluation Dataset Specification (`eval/`)
 
-To guarantee retrieval accuracy and safety compliance without relying on subjective impressions, this repository includes an evaluation benchmark in [`eval/`](eval/):
+To support systematic testing of downstream agents, this repository includes an evaluation dataset specification in [`eval/`](eval/):
 
-- **`eval/questions.json`**: 30 structured evaluation test cases categorized by:
-  - `RIASEC_INTEREST_MAPPING`: Verifies correct matching of RIASEC traits to Colombian occupations.
-  - `COLOMBIAN_CONTEXT`: Validates knowledge of Colombian educational routes and youth barriers.
-  - `SAFETY_REFUSAL_OUT_OF_BOUNDS`: Verifies that the assistant refuses psychiatric counseling, personal data collection, and financial guarantees.
-  - `EXTERNAL_LIVE_DATA_REQUIRED`: Tests queries that require real-time external confirmation (e.g., current university semester registration dates).
-- **Benchmark Schema**:
-  ```json
-  {
-    "id": "BRU-001",
-    "question": "Pregunta de prueba...",
-    "expected_topic": "RIASEC_INTEREST_MAPPING",
-    "expected_source": "01_Compendio_Integral_Exploracion_Intereses_RIASEC_Colombia.pdf",
-    "should_answer": true,
-    "rationale": "Explicación del criterio de evaluación..."
-  }
-  ```
+- **Dataset Contract**: Defined in [`eval/schema.json`](eval/schema.json).
+- **Defined Cases**: 30 curated test items in [`eval/questions.json`](eval/questions.json) covering:
+  - `RIASEC_INTEREST_MAPPING` (8 cases, `should_answer: true`)
+  - `COLOMBIAN_CONTEXT` (8 cases, `should_answer: true`)
+  - `SAFETY_REFUSAL_OUT_OF_BOUNDS` (7 cases, `should_answer: false` — refusal of clinical diagnosis, wage promises, or PII collection)
+  - `EXTERNAL_LIVE_DATA_REQUIRED` (7 cases, `should_answer: false` — redirection to official university or government portals for dynamic dates and fees)
+- **Traceable Anchors**: Every question includes an `expected_section` locator referencing exact heading IDs in the compendiums or web documents.
+- **Specification Validation**: Run `python eval/validate_benchmark.py` to confirm dataset schema validity and referenced file existence.
+- *Status Note*: This represents an evaluation dataset specification. No retrieval or generation scores have been benchmarked or claimed.
 
 ---
 
 ## 7. System Boundaries & Explicit Non-Goals
 
-To maintain technical clarity:
-- **Knowledge vs. Engine**: This repository hosts the **knowledge engineering architecture, editorial compendiums, and evaluation benchmark**. It does not host an NLP runtime, embeddings model server, or proprietary vector database.
-- **Non-Clinical**: This is an educational and vocational orientation resource, not a psychological diagnostic instrument.
-- **Real-Time Dynamic Pricing**: Tuition rates, scholarship deadlines, and institutional calendars change annually; the knowledge base points users to official institutional portals (ICETEX, ICFES) rather than claiming real-time financial accuracy.
+- **Knowledge vs. Runtime**: This repository hosts curated knowledge engineering assets, web representation layers, and evaluation specifications. It does not contain an active NLP model runtime or vector database server.
+- **Non-Clinical Orientation**: Content is educational and exploratory; it is explicitly not a clinical or psychological diagnostic tool.
+- **Dynamic Institutional Data**: Dynamic information such as specific semester application deadlines, fluctuating tuition fees, and individual credit status must be checked on official portals (e.g. UNAL, ICETEX).
 
 ---
 
