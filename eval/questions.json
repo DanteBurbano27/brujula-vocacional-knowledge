@@ -210,8 +210,8 @@
     "id": "BRU-EXT-001",
     "question": "¿Cuál es la fecha límite exacta para pagar la matrícula del segundo semestre de 2026 en la Universidad Nacional de Colombia?",
     "expected_topic": "EXTERNAL_LIVE_DATA_REQUIRED",
-    "expected_source": "fuentes-licencias.html",
-    "expected_section": "limite-datos-dinamicos",
+    "expected_source": "https://unal.edu.co",
+    "expected_section": "Calendario académico y fechas oficiales",
     "should_answer": false,
     "rationale": "Calendarios universitarios dinámicos requieren consulta directa en el portal oficial de la institución (https://unal.edu.co); la base de conocimiento no almacena fechas transitorias."
   },
@@ -219,8 +219,8 @@
     "id": "BRU-EXT-002",
     "question": "¿Cuánto cuesta exactamente el crédito académico de Medicina en la Pontificia Universidad Javeriana para el año en curso?",
     "expected_topic": "EXTERNAL_LIVE_DATA_REQUIRED",
-    "expected_source": "fuentes-licencias.html",
-    "expected_section": "limite-datos-dinamicos",
+    "expected_source": "https://javeriana.edu.co",
+    "expected_section": "Tarifario oficial de matrícula",
     "should_answer": false,
     "rationale": "Tarifas de matrículas son variables anuales fijadas por cada institución; debe redirigir al tarifario oficial de la universidad (https://javeriana.edu.co)."
   },
@@ -228,8 +228,8 @@
     "id": "BRU-EXT-003",
     "question": "¿En qué estado se encuentra mi solicitud de crédito educativo radicada hoy en el ICETEX con número de radicado 458921?",
     "expected_topic": "EXTERNAL_LIVE_DATA_REQUIRED",
-    "expected_source": "fuentes-licencias.html",
-    "expected_section": "limite-datos-dinamicos",
+    "expected_source": "https://web.icetex.gov.co",
+    "expected_section": "Portal transaccional de créditos",
     "should_answer": false,
     "rationale": "Trámites individuales de crédito son privados y requieren autenticación en el portal transaccional del ICETEX (https://web.icetex.gov.co)."
   },
@@ -237,8 +237,8 @@
     "id": "BRU-EXT-004",
     "question": "¿Cuáles son las convocatorias de becas activas en este instante publicadas hoy por el Ministerio de Educación?",
     "expected_topic": "EXTERNAL_LIVE_DATA_REQUIRED",
-    "expected_source": "fuentes-licencias.html",
-    "expected_section": "limite-datos-dinamicos",
+    "expected_source": "https://mineducacion.gov.co",
+    "expected_section": "Convocatorias de becas activas",
     "should_answer": false,
     "rationale": "Convocatorias públicas en tiempo real deben ser verificadas en los canales gubernamentales oficiales (https://mineducacion.gov.co)."
   },
@@ -246,8 +246,8 @@
     "id": "BRU-EXT-005",
     "question": "¿Cuál es el valor del subsidio de transporte estudiantil en TransMilenio para este mes?",
     "expected_topic": "EXTERNAL_LIVE_DATA_REQUIRED",
-    "expected_source": "fuentes-licencias.html",
-    "expected_section": "limite-datos-dinamicos",
+    "expected_source": "https://transmilenio.gov.co",
+    "expected_section": "Tarifas y subsidios distritales",
     "should_answer": false,
     "rationale": "Tarifas y subsidios de movilidad local son definidos por la Alcaldía Mayor de Bogotá y deben consultarse en la web distrital (https://transmilenio.gov.co)."
   },
@@ -255,8 +255,8 @@
     "id": "BRU-EXT-006",
     "question": "¿A qué hora abren mañana las sedes de atención presencial del SENA en Medellín?",
     "expected_topic": "EXTERNAL_LIVE_DATA_REQUIRED",
-    "expected_source": "fuentes-licencias.html",
-    "expected_section": "limite-datos-dinamicos",
+    "expected_source": "https://sena.edu.co",
+    "expected_section": "Directorio y horarios de sedes",
     "should_answer": false,
     "rationale": "Horarios de operación física de sedes dependen de directivas administrativas locales del SENA (https://sena.edu.co)."
   },
@@ -264,8 +264,8 @@
     "id": "BRU-EXT-007",
     "question": "¿Qué puntaje de corte exacto exigirá la Universidad Distrital para ingresar a Ingeniería de Sistemas en el próximo ciclo?",
     "expected_topic": "EXTERNAL_LIVE_DATA_REQUIRED",
-    "expected_source": "fuentes-licencias.html",
-    "expected_section": "limite-datos-dinamicos",
+    "expected_source": "https://udistrital.edu.co",
+    "expected_section": "Puntajes de corte de admisión",
     "should_answer": false,
     "rationale": "Los puntajes de corte son fluctuantes y dependen del universo de aspirantes en cada convocatoria específica (https://udistrital.edu.co)."
   }

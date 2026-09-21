@@ -1,9 +1,10 @@
 """Benchmark specification validation utility for Brújula Vocacional Colombia.
 
-Validates evaluation cases against eval/schema.json contract, verifies ID uniqueness,
-checks topic distribution, confirms local source file existence, and validates
-that referenced HTML anchors actually exist as HTML element IDs.
-Also confirms the presence of canonical PDF compendiums in documents/.
+Validates evaluation cases against eval/schema.json contract using jsonschema Draft7Validator,
+verifies ID uniqueness, checks topic distribution and should_answer consistency,
+confirms local HTML source file existence and validates that referenced HTML anchors actually
+exist as element IDs, asserts external live data cases as valid external URLs, and confirms the
+presence of canonical PDF compendiums in documents/.
 Does NOT execute RAG retrieval or generate simulated scores.
 """
 
@@ -11,6 +12,7 @@ import json
 import re
 from collections import Counter
 from pathlib import Path
+from jsonschema import Draft7Validator
 
 
 def validate_benchmark() -> bool:
@@ -22,23 +24,27 @@ def validate_benchmark() -> bool:
         print(f"[FAIL] Benchmark file not found at {benchmark_path}")
         return False
 
-    with open(benchmark_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    if not isinstance(data, list):
-        print("[FAIL] Root of questions.json must be a list of objects.")
+    if not schema_path.exists():
+        print(f"[FAIL] Schema file not found at {schema_path}")
         return False
 
-    # Contract keys
-    required_keys = {
-        "id",
-        "question",
-        "expected_topic",
-        "expected_source",
-        "expected_section",
-        "should_answer",
-        "rationale",
-    }
+    # 1. Load schema and benchmark specification
+    with open(schema_path, "r", encoding="utf-8") as sf:
+        schema = json.load(sf)
+
+    with open(benchmark_path, "r", encoding="utf-8") as bf:
+        data = json.load(bf)
+
+    # 2. Strict Draft-07 JSON Schema validation
+    validator = Draft7Validator(schema)
+    schema_errors = list(validator.iter_errors(data))
+    if schema_errors:
+        print(f"[FAIL] Draft-07 schema validation failed with {len(schema_errors)} error(s):")
+        for err in schema_errors:
+            print(f"  - At {err.json_path}: {err.message}")
+        return False
+
+    # Contract consistency sets
     allowed_topics = {
         "RIASEC_INTEREST_MAPPING",
         "COLOMBIAN_CONTEXT",
@@ -48,20 +54,11 @@ def validate_benchmark() -> bool:
 
     ids = set()
     topic_counter = Counter()
-
-    # Cache file contents for anchor validation
     html_cache: dict[str, str] = {}
+    html_cases_count = 0
+    external_cases_count = 0
 
     for idx, item in enumerate(data):
-        if not isinstance(item, dict):
-            print(f"[FAIL] Item at index {idx} is not an object.")
-            return False
-
-        missing = required_keys - set(item.keys())
-        if missing:
-            print(f"[FAIL] Item {item.get('id', idx)} is missing keys: {missing}")
-            return False
-
         item_id = item["id"]
         if item_id in ids:
             print(f"[FAIL] Duplicate ID found: {item_id}")
@@ -75,9 +72,6 @@ def validate_benchmark() -> bool:
         topic_counter[topic] += 1
 
         should_answer = item["should_answer"]
-        if not isinstance(should_answer, bool):
-            print(f"[FAIL] 'should_answer' must be boolean in {item_id}")
-            return False
 
         # Consistency assertions
         if topic == "SAFETY_REFUSAL_OUT_OF_BOUNDS" and should_answer is not False:
@@ -92,26 +86,32 @@ def validate_benchmark() -> bool:
             print(f"[FAIL] In-domain item {item_id} must have should_answer: true")
             return False
 
-        # Verify source existence and anchor traceability
         source = item["expected_source"]
         section = item["expected_section"].lstrip("#")
 
-        if source.endswith(".html"):
+        if source.startswith("http://") or source.startswith("https://"):
+            # External reference case
+            if topic != "EXTERNAL_LIVE_DATA_REQUIRED":
+                print(f"[FAIL] External URL source in non-external topic for {item_id}: {source}")
+                return False
+            external_cases_count += 1
+
+        elif source.endswith(".html"):
+            # Local HTML-backed case
             local_path = base_dir / source
             if not local_path.exists():
                 print(f"[FAIL] Referenced HTML source not found: {source} (in {item_id})")
                 return False
 
-            # Load into cache if not loaded
             if source not in html_cache:
                 with open(local_path, "r", encoding="utf-8") as hf:
                     html_cache[source] = hf.read()
 
-            # Verify that id="section" exists in the HTML
             id_pattern = rf'id=["\']{re.escape(section)}["\']'
             if not re.search(id_pattern, html_cache[source]):
                 print(f"[FAIL] Anchor id '{section}' not found in {source} (item {item_id})")
                 return False
+            html_cases_count += 1
 
         elif source.endswith(".pdf"):
             local_path = base_dir / "documents" / source
@@ -121,11 +121,11 @@ def validate_benchmark() -> bool:
                 print(f"[FAIL] Referenced PDF source not found: {source} (in {item_id})")
                 return False
 
-        elif not source.startswith("http"):
+        else:
             print(f"[FAIL] Unrecognized source format: {source} (in {item_id})")
             return False
 
-    # Check that canonical PDF compendiums exist
+    # Check canonical PDF assets
     pdf1 = base_dir / "documents" / "01_Compendio_Integral_Exploracion_Intereses_RIASEC_Colombia.pdf"
     pdf2 = base_dir / "documents" / "02_Compendio_Integral_Acompanamiento_Contexto_Juvenil_Colombia.pdf"
     if not pdf1.exists():
@@ -137,7 +137,7 @@ def validate_benchmark() -> bool:
 
     print("=" * 65)
     print(" BRÚJULA VOCACIONAL — EVALUATION SPECIFICATION VALIDATION")
-    print(" Status: VALID (Evaluation contract verified)")
+    print(" Status: VALID (Draft-07 schema & evaluation contract verified)")
     print("=" * 65)
     print(f"Total Defined Evaluation Cases: {len(data)}")
     print("Distribution by Topic:")
@@ -145,8 +145,9 @@ def validate_benchmark() -> bool:
         print(f"  - {topic}: {count} cases")
     print(f"Unique Test IDs Verified: {len(ids)}")
     print("Source & Anchor Traceability:")
-    print("  [OK] All 30 cases verified against local HTML source files and stable element IDs.")
-    print("  [OK] Canonical PDF compendiums verified in documents/ directory.")
+    print(f"  [OK] All local HTML-backed cases verified against stable element IDs ({html_cases_count} cases).")
+    print(f"  [OK] External-live-data cases validated as external references ({external_cases_count} cases).")
+    print("  [OK] Canonical PDF assets verified.")
     print("\nNote: Validates specification contract. No retrieval score has been measured.")
     print("=" * 65)
     return True
