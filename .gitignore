@@ -1,0 +1,14 @@
+# OS artifacts
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local environments
+.env*
+.venv/
+venv/

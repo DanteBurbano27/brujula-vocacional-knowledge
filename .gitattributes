@@ -1,0 +1,5 @@
+# Enforce LF line endings for text files to preserve cryptographic hash stability
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+*.jpg binary

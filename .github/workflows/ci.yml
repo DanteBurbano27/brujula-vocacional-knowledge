@@ -1,0 +1,35 @@
+name: Brújula Knowledge Validation CI
+
+on:
+  push:
+    branches: ["main", "master", "hardening/**"]
+  pull_request:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Knowledge & Evaluation Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validation dependencies
+        run: pip install -r eval/requirements.txt
+
+      - name: Validate evaluation specification contract
+        run: python eval/validate_benchmark.py
+
+      - name: Verify SHA256 checksum manifest
+        run: |
+          sha256sum -c MANIFEST-SHA256.txt

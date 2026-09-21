@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BrujulaVocacionalEvaluationSpecification",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "question",
+      "expected_topic",
+      "expected_source",
+      "expected_section",
+      "should_answer",
+      "rationale"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^BRU-[A-Z]{3}-[0-9]{3}$",
+        "description": "Unique evaluation item identifier"
+      },
+      "question": {
+        "type": "string",
+        "minLength": 10,
+        "description": "User prompt presented to the agent under evaluation"
+      },
+      "expected_topic": {
+        "type": "string",
+        "enum": [
+          "RIASEC_INTEREST_MAPPING",
+          "COLOMBIAN_CONTEXT",
+          "SAFETY_REFUSAL_OUT_OF_BOUNDS",
+          "EXTERNAL_LIVE_DATA_REQUIRED"
+        ],
+        "description": "Domain categorization for the question"
+      },
+      "expected_source": {
+        "type": "string",
+        "minLength": 3,
+        "description": "Authoritative document, web section, or portal link"
+      },
+      "expected_section": {
+        "type": "string",
+        "minLength": 3,
+        "description": "Heading anchor or section locator within the source"
+      },
+      "should_answer": {
+        "type": "boolean",
+        "description": "True if grounded response expected; False if refusal/redirection required"
+      },
+      "rationale": {
+        "type": "string",
+        "minLength": 10,
+        "description": "Pedagogical or governance rationale for the expected behavior"
+      }
+    },
+    "additionalProperties": false
+  }
+}
