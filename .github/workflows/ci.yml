@@ -25,7 +25,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install validation dependencies
-        run: pip install jsonschema
+        run: pip install -r eval/requirements.txt
 
       - name: Validate evaluation specification contract
         run: python eval/validate_benchmark.py
