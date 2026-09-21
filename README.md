@@ -150,7 +150,7 @@ To support systematic testing of downstream agents, this repository includes an 
   - `SAFETY_REFUSAL_OUT_OF_BOUNDS` (7 cases, `should_answer: false` — refusal of clinical diagnosis, wage promises, or PII collection)
   - `EXTERNAL_LIVE_DATA_REQUIRED` (7 cases, `should_answer: false` — redirection to official university or government portals for dynamic dates and fees)
 - **Traceable Anchors**: Every question includes an `expected_section` locator referencing exact heading IDs in the compendiums or web documents.
-- **Specification Validation**: Run `python eval/validate_benchmark.py` to confirm dataset schema validity and referenced file existence.
+- **Specification Validation**: Install `requirements-dev.txt`, then run `python eval/validate_benchmark.py` to confirm dataset schema validity and referenced file existence.
 - *Status Note*: This represents an evaluation dataset specification. No retrieval or generation scores have been benchmarked or claimed.
 
 ---

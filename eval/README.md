@@ -44,6 +44,7 @@ Each test item in `questions.json` adheres to the formal schema defined in [`eva
 Run the contract validator to confirm dataset integrity and source file existence:
 
 ```bash
+python -m pip install -r requirements-dev.txt
 python eval/validate_benchmark.py
 ```
 
