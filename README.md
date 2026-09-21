@@ -44,7 +44,7 @@ All materials within this repository adhere to verified attribution, licensing, 
 ### Governance & Integrity Verification
 - **Attribution & Licensing**: Open non-commercial educational use. Explicit source citations are embedded in every editorial section (`fuentes-licencias.html`).
 - **Temporal Separation**: Historical data (e.g. OIT youth labor indicators 2016–2023) is explicitly segregated from current labor inquiries to prevent presenting historical trends as real-time economic data.
-- **Cryptographic Asset Manifest**: All repository assets are tracked with SHA256 checksums in [`MANIFEST-SHA256.txt`](MANIFEST-SHA256.txt).
+- **Cryptographic Asset Manifest**: Governed knowledge and evaluation assets are tracked with SHA256 checksums in [`MANIFEST-SHA256.txt`](MANIFEST-SHA256.txt).
 
 #### Validating Cryptographic Hashes
 - **Linux / macOS**:

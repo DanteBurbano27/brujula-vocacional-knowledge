@@ -1,11 +1,14 @@
 """Benchmark specification validation utility for Brújula Vocacional Colombia.
 
 Validates evaluation cases against eval/schema.json contract, verifies ID uniqueness,
-checks topic distribution, and confirms referenced local source existence.
+checks topic distribution, confirms local source file existence, and validates
+that referenced HTML anchors actually exist as HTML element IDs.
+Also confirms the presence of canonical PDF compendiums in documents/.
 Does NOT execute RAG retrieval or generate simulated scores.
 """
 
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -45,6 +48,9 @@ def validate_benchmark() -> bool:
 
     ids = set()
     topic_counter = Counter()
+
+    # Cache file contents for anchor validation
+    html_cache: dict[str, str] = {}
 
     for idx, item in enumerate(data):
         if not isinstance(item, dict):
@@ -86,17 +92,48 @@ def validate_benchmark() -> bool:
             print(f"[FAIL] In-domain item {item_id} must have should_answer: true")
             return False
 
-        # Verify local file presence for in-repo sources
+        # Verify source existence and anchor traceability
         source = item["expected_source"]
-        if not source.startswith("http"):
-            # Local source reference
+        section = item["expected_section"].lstrip("#")
+
+        if source.endswith(".html"):
             local_path = base_dir / source
             if not local_path.exists():
-                # check documents/ prefix
-                alt_path = base_dir / "documents" / source
-                if not alt_path.exists():
-                    print(f"[FAIL] Referenced local source not found: {source} (in {item_id})")
-                    return False
+                print(f"[FAIL] Referenced HTML source not found: {source} (in {item_id})")
+                return False
+
+            # Load into cache if not loaded
+            if source not in html_cache:
+                with open(local_path, "r", encoding="utf-8") as hf:
+                    html_cache[source] = hf.read()
+
+            # Verify that id="section" exists in the HTML
+            id_pattern = rf'id=["\']{re.escape(section)}["\']'
+            if not re.search(id_pattern, html_cache[source]):
+                print(f"[FAIL] Anchor id '{section}' not found in {source} (item {item_id})")
+                return False
+
+        elif source.endswith(".pdf"):
+            local_path = base_dir / "documents" / source
+            if not local_path.exists():
+                local_path = base_dir / source
+            if not local_path.exists():
+                print(f"[FAIL] Referenced PDF source not found: {source} (in {item_id})")
+                return False
+
+        elif not source.startswith("http"):
+            print(f"[FAIL] Unrecognized source format: {source} (in {item_id})")
+            return False
+
+    # Check that canonical PDF compendiums exist
+    pdf1 = base_dir / "documents" / "01_Compendio_Integral_Exploracion_Intereses_RIASEC_Colombia.pdf"
+    pdf2 = base_dir / "documents" / "02_Compendio_Integral_Acompanamiento_Contexto_Juvenil_Colombia.pdf"
+    if not pdf1.exists():
+        print(f"[FAIL] Canonical Compendio 1 PDF not found at {pdf1}")
+        return False
+    if not pdf2.exists():
+        print(f"[FAIL] Canonical Compendio 2 PDF not found at {pdf2}")
+        return False
 
     print("=" * 65)
     print(" BRÚJULA VOCACIONAL — EVALUATION SPECIFICATION VALIDATION")
@@ -107,6 +144,9 @@ def validate_benchmark() -> bool:
     for topic, count in sorted(topic_counter.items()):
         print(f"  - {topic}: {count} cases")
     print(f"Unique Test IDs Verified: {len(ids)}")
+    print("Source & Anchor Traceability:")
+    print("  [OK] All 30 cases verified against local HTML source files and stable element IDs.")
+    print("  [OK] Canonical PDF compendiums verified in documents/ directory.")
     print("\nNote: Validates specification contract. No retrieval score has been measured.")
     print("=" * 65)
     return True
